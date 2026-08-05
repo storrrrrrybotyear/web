@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>المنصة الذكية للموارد البشرية</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="lang-wrapper">
+      <button id="languageToggle" class="lang-switch" aria-label="Change language">🌐 Language</button>
+      <div id="languageMenu" class="lang-menu hidden" aria-label="Language options">
+        <button class="lang-option" data-lang="ar">العربية</button>
+        <button class="lang-option" data-lang="en">English</button>
+      </div>
+    </div>
+    <button id="menuToggle" class="menu-toggle" aria-label="فتح القائمة">☰</button>
+    <nav class="main-nav">
+      <button class="nav-btn" data-page="dashboard">لوحة التحكم</button>
+      <button class="nav-btn" data-page="jobs">الوظائف</button>
+      <button class="nav-btn" data-page="branches">الفروع</button>
+      <button class="nav-btn" data-page="holidays">الإجازات</button>
+      <button class="nav-btn" data-page="assistant">المساعد الذكي</button>
+      <button class="nav-btn" data-page="support">خدمة العملاء</button>
+    </nav>
+    <img class="header-logo" src="https://www.hrsd.gov.sa/themes/custom/hrsd_saud/logo.svg" alt="شعار وزارة الموارد البشرية والتنمية الاجتماعية" />
+  </header>
+
+  <main>
+    <section id="home" class="page active">
+    <div class="hero">
+      <h1>منصة الموارد البشرية الذكية</h1>
+      <p>حل شامل للباحثين عن عمل والفروع الحكومية مع دعم ذكي بالسيرة الذاتية، التوظيف، والخدمات.</p>
+      <div class="hero-banner">
+        <p>منصة ذكية للموارد البشرية تساعد الباحثين عن عمل في اكتشاف الوظائف المناسبة، تحليل السيرة الذاتية، متابعة خدمات الفروع الحكومية، والحصول على تجربة توظيف أكثر سلاسة وذكاءً.</p>
+      </div>
+      <button id="startBtn" class="primary-btn">ابدأ الآن</button>
+    </div>
+    <div class="services-header">
+      <h2>الخدمات المتاحة</h2>
+      <span class="services-underline"></span>
+    </div>
+    <div class="section-grid">
+      <article class="summary-card service-card">
+        <div class="service-icon">📊</div>
+        <h3>لوحة التحكم الشخصية</h3>
+        <p>تُعد الواجهة الرئيسية للمستخدم بعد تسجيل الدخول، حيث توفر وصولًا سريعًا إلى جميع الخدمات المهمة في مكان واحد. تعرض البيانات الشخصية، والوظائف المقترحة بناءً على مؤهلات المستخدم، والسيرة الذاتية المرفوعة، بالإضافة إلى الإشعارات والتنبيهات الخاصة بالوظائف والخدمات الجديدة، مما يسهّل متابعة جميع الأنشطة من خلال لوحة واحدة.</p>
+        <div class="card-actions">
+          <button class="secondary-btn">تفاصيل الخدمة</button>
+          <button class="primary-btn">ابدأ الآن</button>
+        </div>
+      </article>
+      <article class="summary-card service-card">
+        <div class="service-icon">💼</div>
+        <h3>الوظائف الملائمة لك</h3>
+        <p>تعتمد هذه الخدمة على تحليل بيانات المستخدم، مثل المؤهل العلمي، والتخصص، والخبرات، والمهارات، ثم تقوم بعرض الوظائف الأكثر توافقًا معه. كما توضح نسبة التوافق مع كل وظيفة، وأسباب الترشيح، والمهارات التي ينصح بتطويرها لزيادة فرص القبول.</p>
+        <div class="card-actions">
+          <button class="secondary-btn">تفاصيل الخدمة</button>
+          <button class="primary-btn">ابدأ الآن</button>
+        </div>
+      </article>
+      <article class="summary-card service-card">
+        <div class="service-icon">📄</div>
+        <h3>تحليل السيرة الذاتية</h3>
+        <p>تتيح هذه الخدمة للمستخدم رفع سيرته الذاتية بصيغة PDF أو Word، ليقوم النظام بتحليلها باستخدام تقنيات الذكاء الاصطناعي، وإصدار تقرير شامل يتضمن نقاط القوة ونقاط التحسين، ومدى توافق السيرة الذاتية مع متطلبات سوق العمل وأنظمة التوظيف، مع تقديم اقتراحات تساعد على تحسينها قبل التقديم على الوظائف.</p>
+        <div class="card-actions">
+          <button class="secondary-btn">تفاصيل الخدمة</button>
+          <button class="primary-btn">ابدأ الآن</button>
+        </div>
+      </article>
+      <article class="summary-card service-card">
+        <div class="service-icon">🏢</div>
+        <h3>فروع الوزارة</h3>
+        <p>توفر هذه الصفحة معلومات شاملة عن جميع فروع وزارة الموارد البشرية والتنمية الاجتماعية، مع إمكانية البحث حسب المدينة أو المنطقة. وتعرض لكل فرع تفاصيل تشمل أوقات الدوام، والخدمات المتوفرة، والفئات التي يخدمها (رجال، نساء، أو كلاهما)، بالإضافة إلى الموقع ووسائل التواصل.</p>
+        <div class="card-actions">
+          <button class="secondary-btn">تفاصيل الخدمة</button>
+          <button class="primary-btn">ابدأ الآن</button>
+        </div>
+      </article>
+      <article class="summary-card service-card">
+        <div class="service-icon">📅</div>
+        <h3>الإجازات</h3>
+        <p>تابع حالة الطلبات الخاصة بالإجازات الرسمية والشخصية، وتحقق من التقويم المتاح للموافقة على الإجازات القادمة بسهولة وسرعة.</p>
+        <div class="card-actions">
+          <button class="secondary-btn">تفاصيل الخدمة</button>
+          <button class="primary-btn">ابدأ الان</button>
+        </div>
+      </article>
+      <article class="summary-card service-card">
+        <div class="service-icon">🤖</div>
+        <h3>المساعد الذكي</h3>
+        <p>احصل على توصيات سريعة ومساعدة ذكية في اختيار الوظائف، كتابة السيرة الذاتية، وترتيب المستندات بطريقة احترافية تناسب سوق العمل.</p>
+        <div class="card-actions">
+          <button class="secondary-btn">تفاصيل الخدمة</button>
+          <button class="primary-btn">ابدا الان</button>
+        </div>
+      </article>
+      <article class="summary-card service-card">
+        <div class="service-icon">🌐</div>
+        <h3>موقع وزارة الموارد البشرية والتنمية الاجتماعية</h3>
+        <p>الوصول المباشر إلى الموقع الرسمي للوزارة للحصول على آخر المعلومات، الخدمات الإلكترونية، الأخبار، والتحديثات الحكومية.</p>
+        <div class="card-actions">
+          <button class="secondary-btn">تفاصيل الخدمة </button>
+          <button class="primary-btn">ابدا الان</button>
+        </div>
+      </article>
+      <article class="summary-card service-card">
+        <div class="service-icon">☎️</div>
+        <h3>خدمة العملاء</h3>
+        <p>تواصل مع فريق الدعم لمساعدتك في حل المشكلات، الاستفسارات عن الخدمات، أو متابعة طلباتك الحكومية بشكل فوري ومباشر.</p>
+        <div class="card-actions">
+          <button class="secondary-btn">تفاصيل الخدمة</button>
+          <button class="primary-btn">ابدا الآن</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="auth" class="page">
+      <div class="auth-panel">
+        <div class="auth-tabs">
+          <button class="tab-btn active" data-auth="register">إنشاء حساب</button>
+          <button class="tab-btn" data-auth="login">تسجيل دخول</button>
+        </div>
+        <div class="auth-content">
+          <form id="registerForm" class="auth-form active">
+            <h2>إنشاء حساب جديد</h2>
+            <div class="form-grid">
+              <label>
+                الاسم الكامل
+                <input id="regName" type="text" placeholder="أدخل اسمك الكامل" required />
+              </label>
+              <label>
+                البريد الإلكتروني
+                <input id="regEmail" type="email" placeholder="example@mail.com" required />
+              </label>
+              <label>
+                المؤهل العلمي
+                <input id="regQualification" type="text" placeholder="بكالوريوس / ماجستير" required />
+              </label>
+              <label>
+                التخصص
+                <input id="regMajor" type="text" placeholder="مثال: تقنية معلومات" required />
+              </label>
+              <label>
+                سنوات الخبرة
+                <input id="regExperience" type="number" min="0" max="50" placeholder="مثال: 5" required />
+              </label>
+              <label>
+                المهارات
+                <input id="regSkills" type="text" placeholder="مثال: JavaScript, إدارة مشاريع" required />
+              </label>
+              <label>
+                الشهادات المهنية
+                <input id="regCertificates" type="text" placeholder="مثال: PMP, ICDL" />
+              </label>
+              <label>
+                اللغات
+                <input id="regLanguages" type="text" placeholder="مثال: العربية، الإنجليزية" required />
+              </label>
+              <label>
+                رقم الهاتف السعودي
+                <input id="regPhone" type="text" placeholder="05XXXXXXXX" maxlength="10" required />
+              </label>
+              <label>
+                كلمة السر
+                <input id="regPassword" type="password" placeholder="********" minlength="6" required />
+              </label>
+            </div>
+            <button type="submit" class="primary-btn">إنشاء الحساب</button>
+          </form>
+
+          <form id="loginForm" class="auth-form">
+            <h2>تسجيل دخول</h2>
+            <label>
+              رقم الهاتف السعودي
+              <input id="loginPhone" type="text" placeholder="05XXXXXXXX" maxlength="10" required />
+            </label>
+            <p class="hint">سيتم إرسال رمز تحقق إلى رقم الهاتف للدخول.</p>
+            <button type="submit" class="primary-btn">طلب رمز التحقق</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="verify" class="page">
+      <div class="form-card">
+        <h2>تأكيد الحساب</h2>
+        <p>لقد أرسلنا رمز التحقق إلى رقم هاتفك.</p>
+        <div class="verification-codes">
+          <p>رمز الهاتف: <strong id="displayPhoneCode">-</strong></p>
+        </div>
+        <form id="verifyForm" class="auth-form">
+          <label>
+            رمز الهاتف (4 أرقام)
+            <input id="verifyPhoneCode" type="text" maxlength="4" inputmode="numeric" placeholder="1234" required />
+          </label>
+          <button type="submit" class="primary-btn">تأكيد الحساب</button>
+        </form>
+        <p class="hint">تستطيع العودة إلى لوحة التحكم بعد تأكيد الحساب.</p>
+      </div>
+    </section>
+
+    <section id="dashboard" class="page">
+      <div class="page-header">
+        <div>
+          <h2>لوحة التحكم الشخصية</h2>
+          <p>عرض سريع لكل البيانات والوظائف المقترحة والإشعارات.</p>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card"><strong id="statJobs">0</strong><span>وظيفة مقترحة</span></div>
+          <div class="stat-card"><strong id="statTests">0</strong><span>اختبارات مكتملة</span></div>
+          <div class="stat-card"><strong id="statNotifications">0</strong><span>إشعارات</span></div>
+        </div>
+      </div>
+      <div class="profile-box">
+        <div>
+          <h3 id="profileName">اسم المستخدم</h3>
+          <p id="profileEmail">example@mail.com</p>
+          <p id="profileQualification">المؤهل: -</p>
+          <p id="profileMajor">التخصص: -</p>
+        </div>
+        <div class="profile-details">
+          <p><strong>الخبرة:</strong> <span id="profileExperience">-</span> سنة</p>
+          <p><strong>المهارات:</strong> <span id="profileSkills">-</span></p>
+          <p><strong>الشهادات:</strong> <span id="profileCertificates">-</span></p>
+          <p><strong>اللغات:</strong> <span id="profileLanguages">-</span></p>
+        </div>
+      </div>
+      <div class="section-grid">
+        <article class="summary-card">
+          <h3>الوظائف المقترحة</h3>
+          <p>يعرض النظام أفضل الفرص بناء على ملفك الشخصي.</p>
+        </article>
+        <article class="summary-card">
+          <h3>السيرة الذاتية</h3>
+          <p>يمكنك رفع ملف السيرة الذاتية لتحليل ذكي وتوصيات مباشرة.</p>
+        </article>
+        <article class="summary-card">
+          <h3>آخر الأنشطة</h3>
+          <p>متابعة إجراءات التقديم، التقييمات، والوظائف المحفوظة.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="jobs" class="page">
+      <div class="page-header">
+        <div>
+          <h2>الوظائف المناسبة حسب مؤهلاتك</h2>
+          <p>اعرض الوظائف المقترحة مع نسبة التوافق والتوصيات الذكية.</p>
+        </div>
+      </div>
+      <div id="jobsList" class="job-list"></div>
+    </section>
+
+    <section id="cv" class="page">
+      <div class="page-header">
+        <div>
+          <h2>محلل السيرة الذاتية</h2>
+          <p>ارفع ملف السيرة الذاتية للحصول على تقرير ذكي وتحسينات.</p>
+        </div>
+      </div>
+      <div class="form-card">
+        <form id="cvForm">
+          <label>
+            اختر ملف السيرة الذاتية (PDF أو Word)
+            <input id="cvFile" type="file" accept=".pdf,.doc,.docx" />
+          </label>
+          <button type="submit" class="primary-btn">تحليل السيرة الذاتية</button>
+        </form>
+      </div>
+      <div id="cvResult" class="analysis-card hidden">
+        <h3>نتائج تحليل السيرة الذاتية</h3>
+        <div class="analysis-grid">
+          <div><strong>جودة السيرة:</strong> <span id="cvQuality">-</span></div>
+          <div><strong>التوافق مع ATS:</strong> <span id="cvAts">-</span></div>
+          <div><strong>نقاط القوة:</strong> <span id="cvStrengths">-</span></div>
+          <div><strong>نقاط الضعف:</strong> <span id="cvWeaknesses">-</span></div>
+          <div><strong>المهارات المكتشفة:</strong> <span id="cvSkills">-</span></div>
+          <div><strong>المهارات الناقصة:</strong> <span id="cvMissing">-</span></div>
+        </div>
+        <p id="cvAdvice"></p>
+      </div>
+    </section>
+
+    <section id="branches" class="page">
+      <div class="page-header">
+        <div>
+          <h2>فروع وزارة الموارد البشرية</h2>
+          <p>البحث حسب المدينة أو المنطقة ومعرفة الخدمات والأوقات.</p>
+        </div>
+        <label class="search-box">
+          <span>البحث في الفروع</span>
+          <input id="branchSearch" type="search" placeholder="ابحث باسم المدينة أو الفرع" />
+        </label>
+      </div>
+      <div id="branchesList" class="branch-grid"></div>
+    </section>
+
+    <section id="ratings" class="page">
+      <div class="page-header">
+        <div>
+          <h2>تقييم الفروع</h2>
+          <p>شارك تجربتك واطلع على تقييمات المستخدمين وترتيب الفروع.</p>
+        </div>
+      </div>
+      <div class="rating-summary">
+        <div class="stat-card large"><strong id="avgRating">0.0</strong><span>متوسط تقييم الفروع</span></div>
+        <div class="stat-card"><strong id="topBranch">-</strong><span>أفضل فرع</span></div>
+        <div class="stat-card"><strong id="lowBranch">-</strong><span>أقل فرع تقييمًا</span></div>
+      </div>
+      <div id="ratingsList" class="comments-list"></div>
+    </section>
+
+    <section id="holidays" class="page">
+      <div class="page-header">
+        <div>
+          <h2>الإجازات الرسمية</h2>
+          <p>تعرف على الإجازات القادمة والمدة المتبقية لكل إجازة.</p>
+        </div>
+      </div>
+      <div id="holidaysList" class="holiday-grid"></div>
+    </section>
+
+    <section id="assistant" class="page">
+      <div class="page-header">
+        <div>
+          <h2>المساعد الذكي للتوظيف</h2>
+          <p>اسأل المساعد الذكي عن الوظائف والسيرة الذاتية والمقابلات الشخصية.</p>
+        </div>
+      </div>
+      <div class="chat-card">
+        <div id="chatMessages" class="chat-window"></div>
+        <form id="chatForm" class="chat-input">
+          <input id="chatInput" type="text" placeholder="اكتب سؤالك هنا..." autocomplete="off" />
+          <button type="submit" class="primary-btn">إرسال</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="support" class="page">
+      <div class="page-header">
+        <div>
+          <h2>خدمة العملاء</h2>
+          <p>المساعد الذكي يجيب في البداية، ويمكنك طلب تحويل إلى موظف خدمات العملاء.</p>
+        </div>
+      </div>
+      <div class="support-card">
+        <p>الأسئلة الشائعة:</p>
+        <ul>
+          <li>كيفية تقديم طلب وظيفة؟</li>
+          <li>ما هي شروط القبول؟</li>
+          <li>ما هي الخدمات المتاحة؟</li>
+          <li>أين مواقع الفروع؟</li>
+          <li>ما هي مواعيد العمل؟</li>
+        </ul>
+        <button id="contactAgent" class="secondary-btn">التحدث مع موظف خدمة العملاء</button>
+      </div>
+      <div id="supportStatus" class="support-status hidden">
+        <p>تم تحويلك إلى موظف خدمة العملاء. جاري المتابعة...</p>
+      </div>
+    </section>
+
+    <section id="tests" class="page">
+      <div class="page-header">
+        <div>
+          <h2>اختبارات المقابلات الشخصية</h2>
+          <p>اختر الوظيفة وأجب على الأسئلة لتحصل على تقييم وتحسين أداءك.</p>
+        </div>
+      </div>
+      <div class="test-card">
+        <label>
+          اختر الوظيفة
+          <select id="testJobSelect">
+            <option value="مطور ويب">مطور ويب</option>
+            <option value="دعم فني">دعم فني</option>
+            <option value="مدير مشروع">مدير مشروع</option>
+            <option value="خدمة العملاء">خدمة العملاء</option>
+          </select>
+        </label>
+        <button id="startTestBtn" class="primary-btn">بدء الاختبار</button>
+      </div>
+      <div id="testArea" class="test-area hidden">
+        <form id="testForm"></form>
+      </div>
+      <div id="testResult" class="analysis-card hidden"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
