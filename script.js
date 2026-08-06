@@ -58,70 +58,80 @@ const jobsData = [
     location: 'الرياض',
     match: 86,
     reason: 'لديك خبرة في تطوير الويب ومهارات في JavaScript.',
-    missing: ['React', 'اختبار وحدات']
+    missing: ['React', 'اختبار وحدات'],
+    specializations: ['علوم الحاسب', 'هندسة الحاسب', 'الذكاء الاصطناعي']
   },
   {
     title: 'أخصائي دعم فني',
     location: 'جدة',
     match: 92,
     reason: 'خبرتك في الدعم التقني والتواصل ممتازة.',
-    missing: ['شهادة ITIL']
+    missing: ['شهادة ITIL'],
+    specializations: ['نظم معلومات', 'شبكات حاسب', 'علوم الحاسب']
   },
   {
     title: 'مدير مشروع',
     location: 'الدمام',
     match: 74,
     reason: 'لديك خلفية إدارية قوية ومؤهل مناسب.',
-    missing: ['شهادة PMP', 'خبرة أكبر في التخطيط']
+    missing: ['شهادة PMP', 'خبرة أكبر في التخطيط'],
+    specializations: ['إدارة الأعمال', 'إدارة مشاريع', 'إدارة موارد بشرية']
   },
   {
     title: 'مسؤول خدمة العملاء',
     location: 'الخبر',
     match: 88,
     reason: 'مهاراتك التواصلية مناسبة جدًا لهذه الوظيفة.',
-    missing: ['دورات في تجربة العميل']
+    missing: ['دورات في تجربة العميل'],
+    specializations: ['إدارة الأعمال', 'خدمة العملاء', 'التسويق']
   },
   {
     title: 'محلل بيانات',
     location: 'الرياض',
     match: 81,
     reason: 'مهارات التحليل لديك مناسبة لفهم بيانات العمل.',
-    missing: ['Python', 'إحصاء']
+    missing: ['Python', 'إحصاء'],
+    specializations: ['علوم الحاسب', 'الذكاء الاصطناعي', 'تحليل بيانات']
   },
   {
     title: 'مهندس شبكات',
     location: 'جدة',
     match: 78,
     reason: 'لديك معرفة جيدة بالبنية التحتية وتقنيات الشبكات.',
-    missing: ['CCNA', 'نظم تشغيل']
+    missing: ['CCNA', 'نظم تشغيل'],
+    specializations: ['هندسة الحاسب', 'شبكات حاسب', 'نظم معلومات']
   },
   {
     title: 'مصمم تجربة المستخدم',
     location: 'الدمام',
     match: 85,
     reason: 'لديك قدرة على فهم المستخدم وتصميم واجهات سهلة.',
-    missing: ['Figma', 'بحث المستخدم']
+    missing: ['Figma', 'بحث المستخدم'],
+    specializations: ['تصميم جرافيك', 'تصميم تجربة المستخدم', 'تصميم واجهات']
   },
   {
     title: 'مدير علاقات عملاء',
     location: 'مكة',
     match: 79,
     reason: 'خبرتك بالتواصل تدعم هذه الوظيفة بشكل جيد.',
-    missing: ['إدارة علاقات', 'تسويق']
+    missing: ['إدارة علاقات', 'تسويق'],
+    specializations: ['إدارة الأعمال', 'علاقات عملاء', 'التسويق']
   },
   {
     title: 'كاتب محتوى',
     location: 'الرياض',
     match: 82,
     reason: 'تملك أسلوبًا كتابيًا مناسبًا للمحتوى الرقمي.',
-    missing: ['SEO', 'كتابة تسويقية']
+    missing: ['SEO', 'كتابة تسويقية'],
+    specializations: ['إعلام', 'الكتابة الإبداعية', 'التسويق الرقمي']
   },
   {
     title: 'أخصائي موارد بشرية',
     location: 'الخبر',
     match: 76,
     reason: 'لديك مؤهلات جيدة للتعامل مع شؤون الموظفين.',
-    missing: ['CV تحليل', 'توظيف']
+    missing: ['CV تحليل', 'توظيف'],
+    specializations: ['إدارة الموارد البشرية', 'إدارة الأعمال', 'الاستشارات الإدارية']
   }
 ];
 
@@ -318,7 +328,7 @@ function renderJobs(filter = '') {
   jobsList.innerHTML = '';
   const normalizedFilter = filter.trim().toLowerCase();
   const filteredJobs = normalizedFilter
-    ? jobsData.filter((job) => job.title.toLowerCase().includes(normalizedFilter) || job.reason.toLowerCase().includes(normalizedFilter))
+    ? jobsData.filter((job) => job.title.toLowerCase().includes(normalizedFilter) || job.reason.toLowerCase().includes(normalizedFilter) || job.specializations.some((spec) => spec.toLowerCase().includes(normalizedFilter)))
     : jobsData;
 
   const note = document.createElement('p');
@@ -348,6 +358,7 @@ function renderJobs(filter = '') {
       <div class="badge"><span>${job.match}%</span> نسبة التوافق</div>
       <div class="progress-bar"><div class="progress-fill" style="width: ${job.match}%;"></div></div>
       <p><strong>سبب الترشيح:</strong> ${job.reason}</p>
+      <p><strong>التخصصات المتاحة:</strong> ${job.specializations.join('، ')}</p>
       <p><strong>المهارات الناقصة:</strong> ${job.missing.join('، ')}</p>
       <div class="job-actions">
         <button class="secondary-btn" data-action="save" data-index="${actualIndex}">${savedJobs.has(actualIndex) ? 'محفوظ' : 'حفظ الوظيفة'}</button>
