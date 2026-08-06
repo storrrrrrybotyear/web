@@ -580,6 +580,17 @@ button#startBtn.primary-btn:hover {
   margin: 0;
 }
 
+.jobs-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.2rem;
+}
+
+.jobs-toolbar button {
+  white-space: nowrap;
+}
+
+
 .page-header p {
   margin: 0.5rem 0 0;
   color: var(--muted);

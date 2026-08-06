@@ -12,6 +12,7 @@ const loginForm = document.getElementById('loginForm');
 const verifyForm = document.getElementById('verifyForm');
 const displayPhoneCode = document.getElementById('displayPhoneCode');
 const jobsList = document.getElementById('jobsList');
+const filterJobsBtn = document.getElementById('filterJobsBtn');
 const branchesList = document.getElementById('branchesList');
 const branchSearch = document.getElementById('branchSearch');
 const ratingsList = document.getElementById('ratingsList');
@@ -47,6 +48,7 @@ const statNotifications = document.getElementById('statNotifications');
 let currentUser = null;
 let currentPage = 'home';
 let generatedPhoneCode = '';
+let currentJobFilter = '';
 const savedJobs = new Set();
 const completedTests = [];
 
@@ -78,6 +80,48 @@ const jobsData = [
     match: 88,
     reason: 'مهاراتك التواصلية مناسبة جدًا لهذه الوظيفة.',
     missing: ['دورات في تجربة العميل']
+  },
+  {
+    title: 'محلل بيانات',
+    location: 'الرياض',
+    match: 81,
+    reason: 'مهارات التحليل لديك مناسبة لفهم بيانات العمل.',
+    missing: ['Python', 'إحصاء']
+  },
+  {
+    title: 'مهندس شبكات',
+    location: 'جدة',
+    match: 78,
+    reason: 'لديك معرفة جيدة بالبنية التحتية وتقنيات الشبكات.',
+    missing: ['CCNA', 'نظم تشغيل']
+  },
+  {
+    title: 'مصمم تجربة المستخدم',
+    location: 'الدمام',
+    match: 85,
+    reason: 'لديك قدرة على فهم المستخدم وتصميم واجهات سهلة.',
+    missing: ['Figma', 'بحث المستخدم']
+  },
+  {
+    title: 'مدير علاقات عملاء',
+    location: 'مكة',
+    match: 79,
+    reason: 'خبرتك بالتواصل تدعم هذه الوظيفة بشكل جيد.',
+    missing: ['إدارة علاقات', 'تسويق']
+  },
+  {
+    title: 'كاتب محتوى',
+    location: 'الرياض',
+    match: 82,
+    reason: 'تملك أسلوبًا كتابيًا مناسبًا للمحتوى الرقمي.',
+    missing: ['SEO', 'كتابة تسويقية']
+  },
+  {
+    title: 'أخصائي موارد بشرية',
+    location: 'الخبر',
+    match: 76,
+    reason: 'لديك مؤهلات جيدة للتعامل مع شؤون الموظفين.',
+    missing: ['CV تحليل', 'توظيف']
   }
 ];
 
@@ -246,9 +290,56 @@ function updateDashboard() {
   statNotifications.textContent = 3;
 }
 
-function renderJobs() {
+function getJobsForMajor(major) {
+  if (!major) return jobsData;
+  const normalized = major.toLowerCase();
+  const matches = (job, terms) => terms.some((term) => job.title.toLowerCase().includes(term) || job.reason.toLowerCase().includes(term));
+
+  if (/(تقنية|معلومات|IT|برمج|تطوير)/i.test(normalized)) {
+    return jobsData.filter((job) => matches(job, ['مطور واجهات أمامية', 'مطور', 'برمج']));
+  }
+  if (/(دعم|فني|support)/i.test(normalized)) {
+    return jobsData.filter((job) => matches(job, ['أخصائي دعم فني', 'دعم', 'فني']));
+  }
+  if (/(إدارة مشروع|مدير مشروع|مشروع)/i.test(normalized)) {
+    return jobsData.filter((job) => matches(job, ['مدير مشروع', 'مشروع']));
+  }
+  if (/(خدمة العملاء|خدمة عميل|المراسلة|customer)/i.test(normalized)) {
+    return jobsData.filter((job) => matches(job, ['مسؤول خدمة العملاء', 'خدمة العملاء']));
+  }
+  if (/(سيرة ذاتية|cv|resume|تحليل)/i.test(normalized)) {
+    return jobsData.filter((job) => matches(job, ['تحليل السيرة الذاتية']));
+  }
+
+  return jobsData;
+}
+
+function renderJobs(filter = '') {
   jobsList.innerHTML = '';
-  jobsData.forEach((job, index) => {
+  const normalizedFilter = filter.trim().toLowerCase();
+  const filteredJobs = normalizedFilter
+    ? jobsData.filter((job) => job.title.toLowerCase().includes(normalizedFilter) || job.reason.toLowerCase().includes(normalizedFilter))
+    : jobsData;
+
+  const note = document.createElement('p');
+  note.style.marginBottom = '1rem';
+  note.style.fontWeight = '700';
+  note.textContent = normalizedFilter
+    ? `عرض الوظائف التي تطابق التخصص: ${filter}`
+    : 'عرض أفضل 10 وظائف متاحة.';
+  jobsList.appendChild(note);
+
+  if (filteredJobs.length === 0) {
+    const emptyNotice = document.createElement('p');
+    emptyNotice.textContent = 'لم يتم العثور على وظائف بهذا التخصص. حاول اسم تخصص آخر.';
+    emptyNotice.style.fontWeight = '600';
+    jobsList.appendChild(emptyNotice);
+    return;
+  }
+
+  const jobsToShow = filteredJobs.slice(0, 10);
+  jobsToShow.forEach((job) => {
+    const actualIndex = jobsData.indexOf(job);
     const card = document.createElement('article');
     card.className = 'job-card';
     card.innerHTML = `
@@ -259,8 +350,8 @@ function renderJobs() {
       <p><strong>سبب الترشيح:</strong> ${job.reason}</p>
       <p><strong>المهارات الناقصة:</strong> ${job.missing.join('، ')}</p>
       <div class="job-actions">
-        <button class="secondary-btn" data-action="save" data-index="${index}">${savedJobs.has(index) ? 'محفوظ' : 'حفظ الوظيفة'}</button>
-        <button class="primary-btn" data-action="apply" data-index="${index}">التقديم الآن</button>
+        <button class="secondary-btn" data-action="save" data-index="${actualIndex}">${savedJobs.has(actualIndex) ? 'محفوظ' : 'حفظ الوظيفة'}</button>
+        <button class="primary-btn" data-action="apply" data-index="${actualIndex}">التقديم الآن</button>
       </div>
     `;
     jobsList.appendChild(card);
@@ -534,6 +625,12 @@ startTestBtn.addEventListener('click', () => {
   renderTestQuestions(testJobSelect.value);
   testArea.classList.remove('hidden');
   testResult.classList.add('hidden');
+});
+
+filterJobsBtn?.addEventListener('click', () => {
+  const filter = prompt('الرجاء إدخال اسم التخصص للبحث عن الوظائف المناسبة:');
+  currentJobFilter = filter ? filter.trim() : '';
+  renderJobs(currentJobFilter);
 });
 
 testForm.addEventListener('submit', (event) => {
