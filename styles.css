@@ -439,6 +439,19 @@ button#startBtn.primary-btn:hover {
   overflow: auto;
 }
 
+.flip-card-front {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1rem;
+  padding: 2rem 1.5rem;
+  box-sizing: border-box;
+}
+
+.flip-card-front p {
+  margin: auto 0;
+}
+
 .flip-card-back::-webkit-scrollbar {
   width: 10px;
 }
@@ -528,11 +541,38 @@ button#startBtn.primary-btn:hover {
   width: 100%;
   justify-content: center;
   flex-wrap: wrap;
+  margin-top: auto;
 }
 
 .card-actions button {
   width: auto;
   min-width: 140px;
+}
+
+.summary-card.service-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.summary-card.service-card .service-icon,
+.summary-card.service-card h3,
+.summary-card.service-card p {
+  width: 100%;
+}
+
+.summary-card.service-card .service-icon {
+  font-size: 2.4rem;
+}
+
+.summary-card.service-card h3 {
+  text-align: center;
+}
+
+.summary-card.service-card p {
+  flex: 1 1 auto;
+  text-align: center;
+  margin: 0;
 }
 
 .secondary-btn {
@@ -1023,6 +1063,7 @@ label {
 
   .service-card {
     padding: 1rem;
+    min-height: 340px;
   }
 
   .hero {
@@ -1038,6 +1079,16 @@ label {
 
   .section-grid .service-card {
     padding: 0.9rem;
+    min-height: 320px;
+  }
+
+  .summary-card.service-card,
+  .summary-card.service-card .flip-card,
+  .summary-card.service-card .flip-card-inner,
+  .summary-card.service-card .flip-card-front,
+  .summary-card.service-card .flip-card-back {
+    min-height: 320px !important;
+    height: 100%;
   }
 
   .hero h1 {
