@@ -388,24 +388,41 @@ function renderBranches(filter = '') {
     });
 }
 
+function getPreviewText(text, maxLength = 180) {
+  const trimmed = text.trim();
+  if (trimmed.length <= maxLength) return trimmed;
+  return `${trimmed.slice(0, maxLength).trim()}...`;
+}
+
 function initServiceCardFlips() {
   document.querySelectorAll('.summary-card.service-card').forEach((card) => {
     if (card.dataset.flipInitialized) return;
     const detailsText = card.querySelector('p')?.textContent || '';
+    const previewText = getPreviewText(detailsText, 170);
     const titleText = card.querySelector('h3')?.textContent || '';
-    const title = card.querySelector('h3')?.outerHTML || '';
+    const titleElement = card.querySelector('h3');
+    const title = titleElement?.outerHTML || '';
     const icon = card.querySelector('.service-icon')?.outerHTML || '';
-    const actions = card.querySelector('.card-actions')?.outerHTML || '';
+    // Always generate actions so every card has a details + start button
+    const sectionTarget = card.dataset.section || '';
+    const actions = `
+      <div class="card-actions">
+        <button class="secondary-btn details-btn">تفاصيل الخدمة</button>
+        <button class="primary-btn" data-target="${sectionTarget}">ابدأ الآن</button>
+      </div>
+    `;
     const frontContent = document.createElement('div');
     frontContent.className = 'flip-card-front';
-    frontContent.innerHTML = `${icon}${title}<p>${detailsText}</p>${actions}`;
+    frontContent.innerHTML = `<div class="card-icon-row">${icon}</div><div class="card-title-row">${title}</div><div class="front-copy-wrapper"><p class="front-copy">${previewText}</p></div>${actions}`;
     const backContent = document.createElement('div');
     backContent.className = 'flip-card-back';
     backContent.innerHTML = `
       <div class="back-header">تفاصيل الخدمة</div>
       <h4 class="back-title">${titleText}</h4>
       <p class="back-copy">${detailsText}</p>
-      <button type="button" class="secondary-btn close-card-btn">رجوع</button>
+      <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:auto;">
+        <button type="button" class="secondary-btn close-card-btn">رجوع</button>
+      </div>
     `;
     const inner = document.createElement('div');
     inner.className = 'flip-card-inner';
@@ -493,15 +510,103 @@ function renderTestQuestions(jobName) {
   testForm.innerHTML += '<button type="submit" class="primary-btn">تقديم الاختبار</button>';
 }
 
-function showCvResult() {
+function readUploadedText(file) {
+  return new Promise((resolve) => {
+    if (!file) {
+      resolve('');
+      return;
+    }
+
+    if (file.type.startsWith('text/') || file.name.toLowerCase().endsWith('.txt')) {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result || '');
+      reader.onerror = () => resolve('');
+      reader.readAsText(file);
+      return;
+    }
+
+    resolve(file.name || '');
+  });
+}
+
+function buildCvAnalysis(uploadedText = '', user = currentUser) {
+  const normalizedText = (uploadedText || '').trim();
+  const textLower = normalizedText.toLowerCase();
+  const skills = (user?.skills || '').split(',').map((item) => item.trim()).filter(Boolean);
+  const major = user?.major || 'التخصص';
+  const qualification = user?.qualification || 'المؤهل';
+  const experience = user?.experience || '0';
+  const languages = (user?.languages || '').split(',').map((item) => item.trim()).filter(Boolean);
+  const keywordMatches = skills.filter((skill) => textLower.includes(skill.toLowerCase()));
+  const hasStructure = /خبرة|experience|مهارات|skills|تعليم|education|شهادة|certificate|ملخص|summary/i.test(textLower);
+  const score = Math.min(100, 45 + keywordMatches.length * 12 + (hasStructure ? 12 : 0) + (skills.length >= 3 ? 8 : 0) + (experience && experience !== '-' ? 5 : 0));
+  const quality = score >= 80 ? 'ممتازة' : score >= 60 ? 'جيدة' : 'ضعيفة';
+  const strengths = [];
+  if (skills.length) strengths.push(`مهارات واضحة: ${skills.slice(0, 3).join('، ')}`);
+  if (experience && experience !== '-') strengths.push(`خبرة مذكورة: ${experience} سنوات`);
+  if (languages.length) strengths.push(`لغات: ${languages.join('، ')}`);
+  if (!strengths.length) strengths.push('بيانات المستخدم متوفرة ومناسبة للتحليل');
+  const weaknesses = [];
+  if (keywordMatches.length < Math.min(skills.length, 3)) weaknesses.push('غياب بعض كلمات ATS الأساسية');
+  if (!hasStructure) weaknesses.push('نقص في ترتيب الأقسام الوظيفية');
+  if (!normalizedText) weaknesses.push('لم يتم استخراج نص واضح من الملف المرفوع');
+  const advice = quality === 'ممتازة'
+    ? 'سيرتك ممتازة ومناسبة للتقديم، ومع ذلك يمكن تحسين الظهور في ATS بإضافة عناوين واضحة مثل Experience و Skills.'
+    : quality === 'جيدة'
+      ? 'سيرتك جيدة، لكن يمكن تحسينها بإضافة كلمات مفتاحية ATS وترتيب أقسام الخبرة والمهارات بشكل أوضح.'
+      : 'سيرتك تحتاج إلى تحسين واضح. أضف ملخصًا مهنيًا واضحًا، وأقسام خبرة ومهارات، واستخدم كلمات مفتاحية مناسبة للوظيفة المستهدفة.';
+  const improvedCvText = generateImprovedCvText(user, normalizedText);
+
+  return {
+    quality,
+    atsScore: `${score}%`,
+    strengths,
+    weaknesses,
+    skills: skills.join('، ') || 'لا توجد مهارات مضافة',
+    missing: quality === 'ممتازة' ? 'لا توجد مهارات واضحة مفقودة' : 'مراجعة قسم المهارات والشهادات واللغات',
+    advice,
+    improvedCvText,
+    shouldImprove: quality !== 'ممتازة'
+  };
+}
+
+function generateImprovedCvText(user = currentUser, uploadedText = '') {
+  const name = user?.name || 'اسم المستخدم';
+  const qualification = user?.qualification || 'المؤهل';
+  const major = user?.major || 'التخصص';
+  const experience = user?.experience || '0';
+  const skills = (user?.skills || '').split(',').map((item) => item.trim()).filter(Boolean);
+  const certificates = user?.certificates || 'لا توجد شهادات';
+  const languages = (user?.languages || '').split(',').map((item) => item.trim()).filter(Boolean);
+  const baseNote = uploadedText ? `تم بناء النسخة المحسّنة على بيانات الملف المرفوع والمعلومات الشخصية الحالية.` : 'تم بناء النسخة المحسّنة على المعلومات الشخصية الحالية.';
+
+  return [
+    `الاسم: ${name}`,
+    `الوظيفة المستهدفة: ${qualification} - ${major}`,
+    `ملخص مهني: ${qualification} متخصص/ة في ${major} مع خبرة ${experience} سنوات، ويمتلك/تملك مهارات عملية في ${skills.slice(0, 4).join('، ')}.`,
+    `الخبرة العملية:\n- خبرة عملية في ${major}\n- العمل على مشاريع متعددة مع التركيز على الجودة والكفاءة\n- التوافق مع متطلبات سوق العمل والوظائف المستهدفة`,
+    `المهارات الأساسية: ${skills.join('، ')}`,
+    `الشهادات: ${certificates}`,
+    `اللغات: ${languages.join('، ') || 'غير محدد'}`,
+    `ملاحظات ATS: استخدم عناوين واضحة مثل Summary, Experience, Skills, Education, Certifications, Languages.`,
+    baseNote
+  ].join('\n\n');
+}
+
+function showCvResult(analysis) {
   cvResult.classList.remove('hidden');
-  document.getElementById('cvQuality').textContent = 'جيدة';
-  document.getElementById('cvAts').textContent = 'متوافقة';
-  document.getElementById('cvStrengths').textContent = 'تنظيم جيد، خبرة واضحة، معلومات اتصال واضحة.';
-  document.getElementById('cvWeaknesses').textContent = 'قد تحتاج إلى مزيد من التفاصيل في قسم المهارات.';
-  document.getElementById('cvSkills').textContent = currentUser ? currentUser.skills : 'JavaScript، إدارة مشاريع';
-  document.getElementById('cvMissing').textContent = 'شهادة احترافية، خبرة عملية أكثر.';
-  document.getElementById('cvAdvice').textContent = 'أضف ملخصًا احترافيًا في بداية السيرة الذاتية، وركّز على المهارات العملية والمشاريع السابقة.';
+  cvStatus.textContent = analysis.quality === 'ممتازة'
+    ? 'سيرتك ممتازة ومناسبة للتقديم.'
+    : 'تم تحليل السيرة وتحديد نقاط التحسين.';
+  document.getElementById('cvQuality').textContent = analysis.quality;
+  document.getElementById('cvAts').textContent = analysis.atsScore;
+  document.getElementById('cvStrengths').textContent = analysis.strengths.join(' • ');
+  document.getElementById('cvWeaknesses').textContent = analysis.weaknesses.join(' • ');
+  document.getElementById('cvSkills').textContent = analysis.skills;
+  document.getElementById('cvMissing').textContent = analysis.missing;
+  document.getElementById('cvAdvice').textContent = analysis.advice;
+  improveCvBtn.classList.toggle('hidden', !analysis.shouldImprove);
+  downloadCvBtn.classList.add('hidden');
 }
 
 function setActiveAuthForm(formId) {
@@ -670,13 +775,30 @@ testForm.addEventListener('submit', (event) => {
   `;
 });
 
-cvForm.addEventListener('submit', (event) => {
+let lastCvAnalysis = null;
+
+cvForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!cvFile.files.length) {
     alert('الرجاء اختيار ملف السيرة الذاتية أولاً.');
     return;
   }
-  showCvResult();
+
+  const file = cvFile.files[0];
+  const uploadedText = await readUploadedText(file);
+  const analysis = buildCvAnalysis(uploadedText, currentUser);
+  lastCvAnalysis = analysis;
+  showCvResult(analysis);
+});
+
+improveCvBtn?.addEventListener('click', () => {
+  if (!lastCvAnalysis) return;
+  const blob = new Blob([lastCvAnalysis.improvedCvText], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  downloadCvBtn.href = url;
+  downloadCvBtn.download = 'cv-ats-friendly.txt';
+  downloadCvBtn.classList.remove('hidden');
+  cvStatus.textContent = 'تم تجهيز نسخة محسّنة من السيرة ومناسبة للـ ATS.';
 });
 
 init();

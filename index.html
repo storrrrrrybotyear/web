@@ -17,7 +17,7 @@
     </div>
     <button id="menuToggle" class="menu-toggle" aria-label="فتح القائمة">☰</button>
     <nav class="main-nav">
-      <button class="nav-btn" data-page="dashboard">لوحة التحكم</button>
+      <button class="nav-btn" data-page="home">الرئيسية</button>
       <button class="nav-btn" data-page="jobs">الوظائف</button>
       <button class="nav-btn" data-page="branches">الفروع</button>
       <button class="nav-btn" data-page="holidays">الإجازات</button>
@@ -275,6 +275,7 @@
       </div>
       <div id="cvResult" class="analysis-card hidden">
         <h3>نتائج تحليل السيرة الذاتية</h3>
+        <p id="cvStatus" class="cv-status">-</p>
         <div class="analysis-grid">
           <div><strong>جودة السيرة:</strong> <span id="cvQuality">-</span></div>
           <div><strong>التوافق مع ATS:</strong> <span id="cvAts">-</span></div>
@@ -284,6 +285,10 @@
           <div><strong>المهارات الناقصة:</strong> <span id="cvMissing">-</span></div>
         </div>
         <p id="cvAdvice"></p>
+        <div class="cv-actions">
+          <button id="improveCvBtn" type="button" class="secondary-btn hidden">تحسين السيرة الذاتية</button>
+          <a id="downloadCvBtn" class="primary-btn hidden" download="cv-ats-friendly.txt" href="#">تحميل السيرة المحسّنة</a>
+        </div>
       </div>
     </section>
 
