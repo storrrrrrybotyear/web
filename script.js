@@ -136,13 +136,34 @@ function showPage(pageId) {
 
 navButtons.forEach((button) => {
   button.addEventListener('click', () => {
-    if (button.dataset.page === 'dashboard' && !currentUser) {
+    const targetPage = button.dataset.page;
+    if (targetPage === 'dashboard' && !currentUser) {
       showPage('auth');
       return;
     }
-    showPage(button.dataset.page);
+
+    if (targetPage === 'home') {
+      showPage('home');
+      return;
+    }
+
+    if (targetPage === 'jobs' || targetPage === 'branches' || targetPage === 'holidays' || targetPage === 'assistant' || targetPage === 'support') {
+      showPage('home');
+      scrollToHomeSection(targetPage);
+      return;
+    }
+
+    showPage(targetPage);
   });
 });
+
+function scrollToHomeSection(section) {
+  const card = document.querySelector(`.service-card[data-section="${section}"]`);
+  if (!card) return;
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  card.classList.add('highlight-card');
+  setTimeout(() => card.classList.remove('highlight-card'), 1500);
+}
 
 startBtn?.addEventListener('click', () => showPage('auth'));
 homeBtn?.addEventListener('click', () => showPage('home'));
@@ -235,6 +256,38 @@ function renderBranches(filter = '') {
       `;
       branchesList.appendChild(card);
     });
+}
+
+function initServiceCardFlips() {
+  document.querySelectorAll('.summary-card.service-card').forEach((card) => {
+    if (card.dataset.flipInitialized) return;
+    const detailsText = card.querySelector('p')?.textContent || '';
+    const titleText = card.querySelector('h3')?.textContent || '';
+    const title = card.querySelector('h3')?.outerHTML || '';
+    const icon = card.querySelector('.service-icon')?.outerHTML || '';
+    const actions = card.querySelector('.card-actions')?.outerHTML || '';
+    const frontContent = document.createElement('div');
+    frontContent.className = 'flip-card-front';
+    frontContent.innerHTML = `${icon}${title}<p>${detailsText}</p>${actions}`;
+    const backContent = document.createElement('div');
+    backContent.className = 'flip-card-back';
+    backContent.innerHTML = `
+      <div class="back-header">تفاصيل الخدمة</div>
+      <h4 class="back-title">${titleText}</h4>
+      <p class="back-copy">${detailsText}</p>
+      <button type="button" class="secondary-btn close-card-btn">رجوع</button>
+    `;
+    const inner = document.createElement('div');
+    inner.className = 'flip-card-inner';
+    inner.appendChild(frontContent);
+    inner.appendChild(backContent);
+    const flipWrapper = document.createElement('div');
+    flipWrapper.className = 'flip-card';
+    flipWrapper.appendChild(inner);
+    card.innerHTML = '';
+    card.appendChild(flipWrapper);
+    card.dataset.flipInitialized = 'true';
+  });
 }
 
 function renderRatings() {
@@ -332,6 +385,7 @@ function init() {
   renderBranches();
   renderRatings();
   renderHolidays();
+  initServiceCardFlips();
   setActiveAuthForm('register');
   showPage('home');
 }
@@ -420,9 +474,38 @@ chatForm.addEventListener('submit', (event) => {
   setTimeout(() => appendChat(answer, answer.includes('تحويل') ? 'bot' : 'bot'), 500);
 });
 
+document.addEventListener('click', (event) => {
+  if (event.target.matches('.details-btn')) {
+    const card = event.target.closest('.service-card');
+    card?.classList.add('is-flipped');
+  }
+  if (event.target.matches('.close-card-btn')) {
+    const card = event.target.closest('.service-card');
+    card?.classList.remove('is-flipped');
+  }
+});
+
 contactAgent.addEventListener('click', () => {
   supportStatus.classList.remove('hidden');
   supportStatus.textContent = 'تم تحويلك إلى موظف خدمة العملاء، سيتم الرد عليك قريبًا.';
+});
+
+document.addEventListener('click', (event) => {
+  if (event.target.matches('.primary-btn[data-target]')) {
+    const target = event.target.dataset.target;
+    if (target === 'dashboard' && !currentUser) {
+      showPage('auth');
+      return;
+    }
+
+    if (target === 'jobs' || target === 'branches' || target === 'holidays' || target === 'assistant' || target === 'support') {
+      showPage('home');
+      scrollToHomeSection(target);
+      return;
+    }
+
+    showPage(target);
+  }
 });
 
 startTestBtn.addEventListener('click', () => {
